@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: url(pexels-pixabay-33109.jpg) no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 350px;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            background: orange;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: darkorange;
+        }
+
+        #weatherInfo {
+            margin-top: 20px;
+        }
+
+        /* Loading Animation */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid orange;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🌤 Weather App</h2>
+        <input type="text" id="city" placeholder="Enter city name">
+        <button onclick="getWeather()">Get Weather</button>
+        <div class="loader" id="loader"></div>
+        <div id="weatherInfo"></div>
+    </div>
+
+    <script>
+        async function getWeather() {
+            const city = document.getElementById('city').value.trim();
+            if (!city) {
+                alert('Please enter a city name');
+                return;
+            }
+
+            const apiKey = '831e4b6b4876fe837e7b0743f49811a6'; // Replace with your OpenWeather API Key
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+            // Show loader and clear previous data
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('weatherInfo').innerHTML = '';
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none'; // Hide loader after 3s
+
+                    if (response.ok) {
+                        document.getElementById('weatherInfo').innerHTML = `
+                            <p><strong>${data.name}, ${data.sys.country}</strong></p>
+                            <p>🌡 Temperature: ${data.main.temp}°C</p>
+                            <p>☁️ Weather: ${data.weather[0].description}</p>
+                        `;
+                    } else {
+                        document.getElementById('weatherInfo').innerHTML = `<p>Error: ${data.message}</p>`;
+                    }
+                }, 3000); // 3-second delay before showing weather info
+
+            } catch (error) {
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('weatherInfo').innerHTML = '<p>Could not fetch data. Try again.</p>';
+                console.error("Error fetching weather data:", error);
+            }
+        }
+    </script>
+
+</body>
+</html>
