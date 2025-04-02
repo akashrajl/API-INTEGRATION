@@ -16,6 +16,6 @@ Description : A simple and responsive weather web application that fetches real-
 
 OUTPUT : 
 
-![image](https://github.com/user-attachments/assets/9bf13573-8281-4b3c-99c2-4d53c2308a17)
+![image](https://github.com/user-attachments/assets/627087c1-7f9b-4523-9e08-dc9ec14c08c2)
 
 
